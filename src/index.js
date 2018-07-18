@@ -3,13 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
-import { createStore } from 'redux';
-import rootReducer from './reducers';
 import { Provider } from 'react-redux';
+import configureStore from './store/configureStore';
 
-const store = createStore(rootReducer);
-
-//store.subscribe(()=>console.log("State updated!",store.getState()));
+const store = configureStore();
 
 ReactDOM.render(
     <Provider store={store}>
@@ -17,5 +14,17 @@ ReactDOM.render(
     </Provider>
     , document.getElementById('root')
 );
+
+if (module.hot) {
+    module.hot.accept('./App', () => {
+        ReactDOM.render(
+            <Provider store={store}>
+                <App />
+            </Provider>
+            , document.getElementById('root')
+        );
+    })
+  }
+
 
 registerServiceWorker();
